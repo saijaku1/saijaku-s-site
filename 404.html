@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Not Found</title>
+  <link rel="stylesheet">
+  <link rel="icon" href="../image/jaku.png">
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+  background-size: 300% 300%;
+  animation: gradient-animation 5s infinite ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+}
+
+@keyframes gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.container {
+  text-align: center;
+  animation: fadeIn 2s ease;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.error-code {
+  font-size: 10rem;
+  margin: 0;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(-10px); }
+  50% { transform: translateY(10px); }
+}
+
+.error-text {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.home-link {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  color: white;
+  text-decoration: none;
+  border: 2px solid white;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.home-link:hover {
+  background-color: white;
+  color: black;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+footer nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+footer nav ul li {
+    margin: 0 15px;
+}
+footer nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+footer nav ul li a:hover {
+    color: #fdbb2d;
+}
+    footer nav ul li a:active {
+    color: #b21f1f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="error-message">
+      <h1 class="error-code">404</h1>
+      <p class="error-text">お探しのページは見つかりませんでした。</p>
+      <a href="https://saijaku-site.vercel.app/" class="home-link">ホームに戻る</a>
+    </div>
+  </div>
+  <footer>
+    <p>&copy;2025 じゃくのサイト All Rights Reserved</p> 
+    <nav>
+        <ul>
+            <li><a href="https://saijaku-site.vercel.app/">ホーム</a></li>
+            <li><a href="https://saijaku-site.vercel.app/about">ブログ</a></li>
+            <li><a href="https://saijaku-site.vercel.app/contact">じゃくが作ったサイト</a></li>
+        </ul>
+     </nav>
+  </footer>
+</body>
+</html>
