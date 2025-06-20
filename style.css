@@ -51,7 +51,7 @@ body {
   }
 
   .background {
-    background-image: url("home.webp");
+    background-image: url("../image/home.webp");
     background-size: cover;
     background-position: center;
     min-height: 100vh;
