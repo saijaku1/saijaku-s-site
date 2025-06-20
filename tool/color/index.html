@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../image/jaku.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カラーピッカー</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      background-color: #f7f7f7;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-top: 40px;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 1.2em;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .color-picker, .rgb-picker {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 30px;
+    }
+
+    label {
+      font-size: 1rem;
+      color: #444;
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 160px;
+      text-align: center;
+      margin-bottom: 10px;
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      margin: 8px 4px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    #colorCodeDisplay {
+      margin-top: 30px;
+      font-size: 1rem;
+      color: #444;
+      background-color: #f0f0f0;
+      display: inline-block;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      margin-top: 60px;
+      background-color: #1a1a1a;
+      color: #ccc;
+      padding: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>色を選ぶか、ボタンで色を変える！</h1>
+  <h2>Googleのカラーピッカーのように自分で色を指定して、16進数カラーコードを見つけよう</h2>
+
+  <div class="color-picker">
+    <label for="hexColor">16進数カラーコード:</label>
+    <input type="text" id="hexColor" placeholder="#ffffff" maxlength="7">
+    <button id="applyColor">色を適用</button>
+  </div>
+
+  <button id="randomColorButton">ランダムな色に切り替え</button>
+
+  <div id="colorCodeDisplay">
+    現在のカラーコード: <span id="colorCode">#f0f0f0</span>
+    <button id="copyColorCode">コピー</button>
+  </div>
+
+  <div class="rgb-picker">
+    <h2>RGB値を入力して色を変更</h2>
+    <label for="red">赤 (0–255):</label>
+    <input type="number" id="red" value="240" min="0" max="255"><br>
+    <label for="green">緑 (0–255):</label>
+    <input type="number" id="green" value="240" min="0" max="255"><br>
+    <label for="blue">青 (0–255):</label>
+    <input type="number" id="blue" value="240" min="0" max="255"><br>
+    <button id="applyRGB">RGBで色を適用</button>
+  </div>
+
+  <footer>
+    © 2025 じゃくのサイト | カラー選択ツール
+  </footer>
+
+  <script>
+    document.getElementById("applyColor").addEventListener("click", function() {
+      const hexColor = document.getElementById("hexColor").value.trim();
+      if (/^#([0-9A-Fa-f]{6})$/.test(hexColor)) {
+        document.body.style.backgroundColor = hexColor;
+        document.getElementById("colorCode").textContent = hexColor;
+      } else {
+        alert("正しい16進数カラーコードを入力してください（例: #ffffff）");
+      }
+    });
+
+    document.getElementById("randomColorButton").addEventListener("click", function() {
+      let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+      document.body.style.backgroundColor = randomColor;
+      document.getElementById("colorCode").textContent = randomColor;
+    });
+
+    document.getElementById("copyColorCode").addEventListener("click", function() {
+      const colorCode = document.getElementById("colorCode").textContent;
+      navigator.clipboard.writeText(colorCode).then(() => {
+        alert("カラーコードがコピーされました: " + colorCode);
+      }).catch(err => {
+        alert("コピーに失敗しました: " + err);
+      });
+    });
+
+    document.getElementById("applyRGB").addEventListener("click", function() {
+      const red = document.getElementById("red").value;
+      const green = document.getElementById("green").value;
+      const blue = document.getElementById("blue").value;
+
+      if (red === "" || green === "" || blue === "") {
+        alert("RGBの各値を入力してください。");
+        return;
+      }
+
+      if (red >= 0 && red <= 255 && green >= 0 && green <= 255 && blue >= 0 && blue <= 255) {
+        const rgbColor = `rgb(${red}, ${green}, ${blue})`;
+        document.body.style.backgroundColor = rgbColor;
+        const hexColor = '#' + ((1 << 24) + (parseInt(red) << 16) + (parseInt(green) << 8) + parseInt(blue)).toString(16).slice(1);
+        document.getElementById("colorCode").textContent = hexColor;
+      } else {
+        alert("RGB値は0〜255の範囲で指定してください。");
+      }
+    });
+  </script>
+</body>
+</html>
