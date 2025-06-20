@@ -51,7 +51,7 @@ body {
   }
 
   .background {
-    background-image: url("https://media-www.sqspcdn.com/images/pages/ja-landing/hero/hero-background-2500w.webp");
+    background-image: url("home.webp");
     background-size: cover;
     background-position: center;
     min-height: 100vh;
@@ -71,6 +71,8 @@ body {
 
   .blog {
     max-width: 800px;
+    overflow-y: scroll;
+    max-height: 250px;
     margin: 0 auto;
     background-color: rgba(29, 29, 29, 0.85);
     padding: 25px;
