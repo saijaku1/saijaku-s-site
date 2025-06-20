@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+     <link rel="icon" href="../../image/jaku.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>おみくじゲーム</title>
+    <style>
+   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+body {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    margin: 30px 0 20px;
+    font-size: 40px;
+    color: #00e5ff;
+    text-shadow: 0 0 10px #00e5ff;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 18px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+}
+
+#result {
+    margin: 30px auto;
+    font-size: 24px;
+    padding: 20px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 600px;
+    background-color: #1e1e1e;
+    border-left: 5px solid #00e5ff;
+    box-shadow: 0 8px 20px rgba(0, 255, 255, 0.1);
+}
+
+.history {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #999;
+    padding-top: 10px;
+    border-top: 1px dashed #00e5ff;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input {
+    padding: 12px;
+    margin: 15px 5px;
+    border-radius: 8px;
+    border: 1px solid #00e5ff;
+    background-color: #1e1e1e;
+    color: white;
+    width: 250px;
+}
+
+table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: #1a1a1a;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+}
+
+th, td {
+    border: 1px solid #00e5ff;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #00e5ff;
+    color: #121212;
+    font-weight: bold;
+}
+
+td {
+    color: #ccc;
+}
+
+footer {
+    background-color: #1f1f1f;
+    color: #888;
+    padding: 15px;
+    font-size: 14px;
+    text-align: center;
+    border-top: 1px solid #333;
+    margin-top: 40px;
+}
+
+    </style>
+</head>
+<body>
+    <h1>おみくじゲーム</h1>
+    <div>
+        <button id="drawOmikuji">おみくじを引く</button>
+        <button id="retry">再挑戦</button>
+        <button id="details">運勢の詳細を知る</button>
+    </div>
+    <div id="result"></div>
+    <div class="history" id="history"></div>
+    <input type="text" id="customMessage" placeholder="カスタムメッセージ">
+    <button id="setMessage">メッセージを設定</button>
+
+    <table id="fortuneTable">
+        <thead>
+            <tr>
+                <th>運勢</th>
+                <th>メッセージ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 運勢のデータがここに追加されます -->
+        </tbody>
+    </table>
+
+    <script>
+        // JavaScriptコード
+        const results = [
+        { fortune: "神吉", message: "今日はたくさんいいことある！特に大切なことに挑戦してみてください。油断は禁物" },
+        { fortune: "超大吉", message: "今日は特別な日！全てがうまくいくでしょう！" },
+            { fortune: "大吉", message: "今日は最高の日！頑張って！" },
+            { fortune: "中吉", message: "良いことがあるかも！" },
+            { fortune: "吉", message: "普通の一日かな？" },
+            { fortune: "小吉", message: "少し運が良いかも！" },
+            { fortune: "末吉", message: "今は耐え時。頑張ろう！" },
+            { fortune: "凶", message: "気をつけて、慎重にね。" },
+            { fortune: "大凶", message: "今日は注意が必要。冷静に行動して。" },
+            { fortune: "最凶", message: "今日は予定がない限り何もしない方がいいぞ..." }
+        ];
+
+        const details = {
+            "神吉": "今日はたくさんいいことある！特に大切なことに挑戦してみてください。油断は禁物",
+            "超大吉": "最高の運勢！今日は全てがうまくいくでしょう。",
+            "大吉": "今日の運勢は非常に良いです。大切なことにチャレンジしてみてください。",
+            "中吉": "今日は良いことが起こる予感があります。周りに感謝を忘れずに。",
+            "吉": "特に変わったことはないですが、平穏な日になるでしょう。",
+            "小吉": "少しだけ運が良い日。周りの人に優しくしてみて。",
+            "末吉": "今は辛抱の時期。無理せず過ごしましょう。",
+            "凶": "注意が必要な日。慎重に行動しましょう。",
+            "超凶": "今日は特に注意が必要。冷静に行動して！",
+            "最凶": "今日は予定がない限り何もしない方がいいぞ..."
+        };
+
+        let lastResult = '';
+        let history = [];
+        let score = 0;
+        let customMessages = {};
+
+        function drawOmikuji() {
+            const randomIndex = Math.floor(Math.random() * results.length);
+            lastResult = results[randomIndex];
+            const resultText = `あなたの運勢は: ${lastResult.fortune} - ${lastResult.message}`;
+
+            // スコアの加算
+            score += calculateScore(lastResult.fortune);
+            document.getElementById("result").textContent = `${resultText} | スコア: ${score}`;
+
+            // 履歴の保存
+            history.push(lastResult.fortune);
+            displayHistory();
+            displayFortuneTable(); // テーブルを更新
+        }
+
+        function calculateScore(fortune) {
+            switch (fortune) {
+                case "神吉": return 20; 
+                case "超大吉": return 15;
+                case "大吉": return 10;
+                case "中吉": return 5;
+                case "吉": return 3;
+                case "小吉":
+                case "末吉":
+                case "凶": return 1;
+                case "超凶": return -5; // 超凶はマイナススコア
+               // 神吉は特別なスコア
+                case "最凶": return -10; // 最凶は大きなマイナススコア
+                default: return 0;
+            }
+        }
+
+        function displayHistory() {
+            const historyElement = document.getElementById("history");
+            historyElement.textContent = `履歴: ${history.join(", ")}`;
+        }
+
+        function displayFortuneTable() {
+            const fortuneTableBody = document.getElementById("fortuneTable").querySelector("tbody");
+            fortuneTableBody.innerHTML = ''; // 既存の内容をクリア
+
+            results.forEach(result => {
+                const row = document.createElement("tr");
+                const fortuneCell = document.createElement("td");
+                const messageCell = document.createElement("td");
+
+                fortuneCell.textContent = result.fortune;
+                messageCell.textContent = result.message;
+
+                row.appendChild(fortuneCell);
+                row.appendChild(messageCell);
+                fortuneTableBody.appendChild(row);
+            });
+        }
+
+        function showDetails() {
+            if (lastResult) {
+                const detailedMessage = `運勢: ${lastResult.fortune} - 詳細: ${details[lastResult.fortune]}`;
+                alert(detailedMessage);
+            } else {
+                alert("まだおみくじを引いていません。");
+            }
+        }
+
+        document.getElementById("drawOmikuji").addEventListener("click", drawOmikuji);
+        document.getElementById("retry").addEventListener("click", function() {
+            lastResult = '';
+            document.getElementById("result").textContent = 'もう一度おみくじを引いてみよう！';
+        });
+        document.getElementById("details").addEventListener("click", showDetails);
+
+        document.getElementById("setMessage").addEventListener("click", function() {
+            const userFortune = prompt("どの運勢のメッセージを設定しますか？ (例: 大吉)");
+            const userMessage = document.getElementById("customMessage").value;
+
+            if (userFortune && userMessage) {
+                customMessages[userFortune] = userMessage;
+ alert(`${userFortune}のメッセージを設定しました！`);
+            }
+        });
+    </script>
+    <footer>
+        <p>© 2025 最弱のサイト | おみくじゲーム</p>
+    </footer>
+    
+</body>
+</html>
