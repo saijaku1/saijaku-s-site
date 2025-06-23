@@ -1,0 +1,133 @@
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color:#5eb382 ;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  header {
+    background: linear-gradient(145deg, #5c192f, #ff9b05);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  header h1 {
+    font-size: 2em;
+    margin: 0;
+  }
+  
+  .filters {
+    margin-top: 10px;
+  }
+  
+  .filters input,
+  .filters select {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+  }
+  
+  .filters input:focus,
+  .filters select:focus {
+    border-color: #4a90e2;
+  }
+  
+  #toggleDarkMode {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #4a90e2;
+    border: 1px solid #4a90e2;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  #back {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #4a90e2;
+    border: 1px solid #4a90e2;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  #back:hover {
+    background-color: #4a90e2;
+    color: #fff;
+  }
+  #toggleDarkMode:hover {
+    background-color: #4a90e2;
+    color: #fff;
+  }
+  
+  #noticeList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+  }
+  
+  .notice-card {
+    background-color: #dedada;
+    border: 2px solid #1f5ee6;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    width: 85%;
+    max-width: 600px;
+    margin: 15px;
+    padding: 20px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .notice-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  .dark-mode {
+    background-color: #181a1b;
+    color: #f4f4f4;
+  }
+  
+  .dark-mode header {
+    background: linear-gradient(135deg, #020b14, #4a90e2);
+  }
+  
+  .dark-mode .notice-card {
+    background-color: #242526;
+    color: #ddd;
+    border: 2px solid #e09c61;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
+  }
+  
+  .dark-mode .notice-card:hover {
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
+  }
+  
+  .dark-mode #toggleDarkMode {
+    background-color: #4d4d4d;
+    color: #fff;
+    border-color: #4d4d4d;
+  }
+  
+  .dark-mode #toggleDarkMode:hover ,.dark-mode #back:hover {
+    background-color: #fff;
+    color: #4d4d4d;
+  }
+  .dark-mode #back {
+    background-color: #4d4d4d;
+    color: #fff;
+    border-color: #4d4d4d;
+  }
