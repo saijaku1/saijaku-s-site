@@ -82,9 +82,4 @@ document.getElementById("toggleDarkMode").addEventListener("click", () => {
 
 function back() {
   window.history.back();
-  // window.history.go(-1); // これでも戻れます
-  // window.history.go(-2); // 2つ前に戻ります
-  // window.history.go(1); // 進む
-  // window.history.go(2); // 2つ進みます
-  // window.history.go(0); // リロード
 }
