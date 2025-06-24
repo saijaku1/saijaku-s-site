@@ -1,0 +1,10 @@
+[
+  { "time": 1000, "lane": "d" },
+  { "time": 1300, "lane": "f" },
+  { "time": 1600, "lane": "j" },
+  { "time": 1900, "lane": "k" },
+  { "time": 2200, "lane": "d" },
+  { "time": 2500, "lane": "f" },
+  { "time": 2800, "lane": "j" },
+  { "time": 3100, "lane": "k" }
+]
