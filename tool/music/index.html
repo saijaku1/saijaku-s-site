@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>リズムゲーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>リズムゲーム</h1>
+
+  <div id="difficulty-select">
+    <label for="difficulty">難易度：</label>
+    <select id="difficulty">
+      <option value="easy">簡単</option>
+      <option value="normal" selected>普通</option>
+      <option value="hard">難しい</option>
+      <option value="veryhard">激ムズ</option>
+      <option value="oni">鬼</option>
+    </select>
+    <button id="start-button">スタート</button>
+  </div>
+
+  <div id="game-area">
+    <div class="lane" id="lane-d">D</div>
+    <div class="lane" id="lane-f">F</div>
+    <div class="lane" id="lane-j">J</div>
+    <div class="lane" id="lane-k">K</div>
+  </div>
+
+  <div id="info">
+    <p>スコア：<span id="score">0</span>　|　コンボ：<span id="combo">0</span></p>
+    <p>判定：<span id="judgement">---</span></p>
+  </div>
+
+  <!-- リザルト画面 -->
+  <div id="result" class="hidden">
+    <h2>リザルト</h2>
+    <p>スコア: <span id="final-score"></span></p>
+    <p>最大コンボ: <span id="max-combo"></span></p>
+    <p>Perfect: <span id="perfect-count"></span></p>
+    <p>Good: <span id="good-count"></span></p>
+    <p>Miss: <span id="miss-count"></span></p>
+    <button id="restart-button">もう一度</button>
+  </div>
+
+  <!-- ランキング表示 -->
+  <div id="ranking">
+    <h2>ローカルランキング</h2>
+    <ol id="ranking-list"></ol>
+    <button id="reset-ranking">リセット</button>
+  </div>
+
+  <audio id="bgm" src="audio/bgm.mp3"></audio>
+  <script src="game.js" type="module"></script>
+</body>
+</html>
