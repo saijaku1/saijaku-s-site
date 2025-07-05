@@ -109,8 +109,8 @@ main {
 .show-image{
   display: block;
   margin: 0 auto 20px;
-  width: 100px;
-  height: 100px;
+  width: 400px;
+  height: 400px;
   overflow: hidden;
   opacity:1;
 }
