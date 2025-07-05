@@ -7,16 +7,16 @@ body {
 }
 
 header {
-  background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
   color: #fff;
-  padding: 20px 0;
+  padding: 25px 0;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
   margin: 0;
-  font-size: 2.2em;
+  font-size: 2.4em;
   letter-spacing: 2px;
 }
 
@@ -25,127 +25,171 @@ main {
 }
 
 .talk {
-  margin: 30px 0;
+  
+  margin: 40px 0;
   gap: 20px;
 }
 
-.jaku,
-.kokotu {
+.jaku, .kokotu {
   position: relative;
   display: inline-block;
   opacity: 0;
   transform: translateY(50px);
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  transition: transform 0.8s ease, opacity 0.8s ease;
 }
 
-.talk.visible .jaku,
-.talk.visible .kokotu {
+.talk.visible .jaku, .talk.visible .kokotu {
   opacity: 1;
   transform: translateY(0);
 }
 
-.jaku img,
-.kokotu img {
+.jaku img, .kokotu img {
   border-radius: 50%;
-  border: 3px solid #444;
-  width: 70px;
-  height: 70px;
+  border: 3px solid #555;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
 }
 
-.tooltip,
-.tooltip2 {
+.jaku img:hover, .kokotu img:hover {
+  transform: scale(1.1);
+}
+
+.tooltip, .tooltip2, .tooltip3 {
   font-size: 1em;
-  width: 400px;
+  width: 320px;
   text-align: center;
   padding: 1em;
   position: absolute;
   top: 50%;
+  font-size:1.2em;
   left: 110%;
   transform: translateY(-50%);
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.tooltip:hover, .tooltip2:hover, .tooltip3:hover {
+  transform: translateY(-50%) scale(1.03);
 }
 
 .tooltip {
   background: #a1e0ed;
   color: #1e1e1e;
+  margin-top: 10px;
 }
 
 .tooltip2 {
   background: #f2c94c;
   color: #1e1e1e;
+  margin-top: 10px;
+}
+
+.tooltip3 {
+  background: #485eec;
+  color: #fff;
+  margin-top: 20px;
 }
 
 .goaled {
-  background: #ffffffcc;
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
   border: 2px solid #ccc;
-  border-radius: 12px;
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 30px 20px;
+  border-radius: 15px;
+  max-width: 450px;
+  margin: 60px auto;
+  padding: 40px 25px;
   text-align: center;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+}
+.show-image{
+  display: block;
+  margin: 0 auto 20px;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  opacity:1;
+}
+.show-image.visible img{
+  opacity: 1;
+  transform: translateY(0);
+}
+.goaled:hover {
+  transform: translateY(-5px);
 }
 
 .goaled h2 {
-  font-size: 1.5em;
-  margin-bottom: 15px;
+  font-size: 1.6em;
+  margin-bottom: 20px;
   color: #444;
 }
 
 .list {
   background: #fff;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
   list-style: none;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-size: 1em;
+  transition: background 0.3s ease;
 }
+
+.list:hover {
+  background: #f7f7f7;
+}
+
 .footer-text {
   text-align: center;
   font-size: 0.9em;
   color: #666;
-  margin-top: 20px;
-  padding: 10px;
+  margin-top: 30px;
+  padding: 15px;
   border-top: 1px solid #ddd;
-  position: relative;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
 }
+
 #choose {
-  margin: 60px auto;
+  margin: 80px auto;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 25px;
 }
 
 #Button {
-  padding: 12px 24px;
+  padding: 14px 28px;
   font-size: 1em;
   font-weight: bold;
   color: #fff;
   background: linear-gradient(90deg, #8f4eb0, #a667cc);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #Button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
+
 @media (max-width: 768px) {
-  .tooltip,
-  .tooltip2 {
-    margin: 30px 0;
-    gap: 20px;
-    width: 250px;
+  .tooltip, .tooltip2, .tooltip3 {
+    width: 240px;
+    left: 100%;
+  }
+  .jaku img, .kokotu img {
+    width: 60px;
+    height: 60px;
+  }
+  #choose {
+    flex-direction: column;
+    gap: 15px;
   }
 }
