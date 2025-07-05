@@ -1,0 +1,189 @@
+
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background: linear-gradient(135deg, #89f7fe, #66a6ff,#333);
+    background-attachment: fixed;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+header {
+    background: rgba(0, 122, 255, 0.95);
+    color: white;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+    letter-spacing: 2px;
+    animation: titleWave 3s infinite alternate;
+}
+
+@keyframes titleWave {
+    from { letter-spacing: 2px; }
+    to { letter-spacing: 6px; }
+}
+
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    position: relative;
+    padding: 5px 0;
+    transition: color 0.3s;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #fff;
+    transition: width 0.3s;
+}
+
+nav a:hover {
+    color: #ffd700;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* セクション */
+section {
+    padding: 40px 20px;
+    margin: 30px auto;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 見出し */
+h2 {
+    text-align: center;
+    color: #007aff;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #007aff;
+    margin: 8px auto 0;
+    border-radius: 2px;
+}
+
+
+.anime-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+
+.anime-item {
+    flex: 0 1 280px;
+    margin: 15px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    border: 2px solid #007aff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.anime-item::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    transition: all 0.5s;
+}
+
+.anime-item:hover::before {
+    top: -30%;
+    left: -30%;
+}
+
+.anime-item:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+}
+
+.anime-item h3 {
+    color: #007aff;
+    margin-top: 0;
+}
+
+.anime-item a {
+    color: #007aff;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.anime-item a:hover {
+    transform: translateY(-2px);
+    color: #f15a29;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+footer {
+    background: rgba(0, 122, 255, 0.95);
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+    width: 100%;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.2);
+}
