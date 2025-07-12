@@ -123,8 +123,7 @@ main {
   overflow: hidden;
   opacity:1;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  width:300px;
-  height:300px;
+ 
 }
 .show-image.visible img{
   opacity: 1;
