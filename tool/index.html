@@ -123,6 +123,12 @@
                 <p>ルールは変わりません。一人でもみんなでもプレイできます！</p>
                 <button id="button6">見てみる</button>
             </div>
+         <div class="game">
+               
+                <h3>ジャンプタイミング</h3>
+                <p>ジャンプヒーローの改造版です。ルールはほぼ変わりませんがちょっとだけギミックが変わりました。気軽にプレイしてみてください。</p>
+                <button id="button6">見てみる</button>
+            </div>
               <div class="game">
                 <h3>暗記ゲーム</h3>
                 <p>暗記です。色を覚えてください</p>
@@ -271,25 +277,25 @@ button:hover {
     document.querySelectorAll("button").forEach((button, index) => {
         button.addEventListener("click", function() {
             const urls = [
-                "https://saijaku-site.vercel.app/tool/おみくじ",
-                "https://saijaku-site.vercel.app/tool/color",
-                "https://saijaku-site.vercel.app/tool/password",
-                "https://saijaku-site.vercel.app/tool/calculator",
-                "https://saijaku-site.vercel.app/tool/speak",
-                "https://saijaku-site.vercel.app/tool/iframe",
-                "https://saijaku-site.vercel.app/tool/snake",
-                "https://saijaku-site.vercel.app/tool/homework",
-                "https://saijaku-site.vercel.app/tool/memopad",
-                "https://saijaku-site.vercel.app/tool/study",
-                "https://saijaku-site.vercel.app/tool/supersnake",
-                "https://saijaku-site.vercel.app/tool/runsnake",
-                "https://saijaku-site.vercel.app/tool/old-breakingblocks",
-                "https://saijaku-site.vercel.app/tool/new-breakingblocks",
-                "https://saijaku-site.vercel.app/tool/shooting",
-                "https://bennkyou.f5.si",
-                "https://saijaku-site.vercel.app/tool/jumptiming",
-                "https://saijaku-site.vercel.app/tool/memory",
-                "https://saijaku-site.vercel.app/tool/remember"
+                "https://saijaku.f5.si/tool/おみくじ",
+                "https://saijaku.f5.si/tool/color",
+                "https://saijaku.f5.si/tool/password",
+                "https://saijaku.f5.si/tool/calculator",
+                "https://saijaku.f5.si/tool/speak",
+                "https://saijaku.f5.si/tool/iframe",
+                "https://saijaku-.f5.si/tool/snake",
+                "https://saijaku.f5.si/tool/homework",
+                "https://saijaku.f5.si/tool/memopad",
+                "https://saijaku.f5.si/tool/study",
+                "https://saijaku-.f5.si/tool/supersnake",
+                "https://saijaku.f5.si/tool/runsnake",
+                "https://saijaku.f5.si/tool/old-breakingblocks",
+                "https://saijaku-site.f5.si/tool/new-breakingblocks",
+                "https://saijaku.f5.si/tool/shooting",
+                "https://studies.f5.si",
+                "https://saijaku.f5.si/tool/jumptiming",
+                "https://saijaku.f5.si/tool/memory",
+                "https://saijaku.f5.si/tool/remember"
             ];
             if (index < urls.length) {
                 window.location.href = urls[index];
