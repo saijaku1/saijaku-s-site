@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ジャンプヒーロー 改造版</title>
+<style>
+ body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #1e1e2f, #2a2a40);
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    height: 200vh;
+    
+  }
+  canvas {
+    display: block;
+    margin: 30px auto;
+    background: linear-gradient(to top, #001a4d, #003366);
+    border: 4px solid #444;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+  #startScreen, #gameOverScreen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+  button {
+    padding: 12px 24px;
+    font-size: 18px;
+    background: #4caf50;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin: 10px;
+  }
+  button:hover {
+    background: #45a049;
+  }
+  .skinBtn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 5px;
+    cursor: pointer;
+    border: 2px solid #fff;
+  }
+  .skiBtn :hover{
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);  
+  }
+  .rule-explain {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 5px;
+   font-size:0.95em;
+    border-radius: 10px;
+  }
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+
+    text-align: center;
+    font-size: 0.95em;
+  }
+  .footer-text {
+    margin: 0;
+  }
+  .backBtn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+</style>
+</head>
+<body>
+  <div id="startScreen">
+    <h1>ジャンプヒーロー</h1>
+    <p>スペースキーまたはタップでジャンプ！<br>スキンを選んでスタート</p>
+    <div id="skinSelect"></div>
+    <button onclick="startGame()">スタート</button>
+  </div>
+  <div id="gameOverScreen" style="display:none">
+    <h1>ゲームオーバー</h1>
+    <p id="finalScore"></p>
+    <button onclick="startGame()">リスタート</button>
+    <h2>ローカルランキング</h2>
+    <ol id="rankingList"></ol>
+  </div>
+  <canvas id="gameCanvas" width="480" height="320"></canvas>
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // 定数と変数
+  const ground = 280;
+  let player, platforms, enemies, items, bosses;
+  let frame = 0;
+  let score = 0;
+  let isGameOver = false;
+  let difficultyLevel = 1;
+  let invincible = false;
+  let invincibleTimer = 0;
+  const keys = { space: false };
+
+  // スキンと現在選択中のスキン
+  const skins = ["red", "orange", "lime", "cyan", "magenta"];
+  let currentSkin = 0;
+
+  // 背景アニメ用オブジェクト
+  let clouds = [];
+  let stars = [];
+
+  // 背景ステージによる色変化
+  const backgrounds = [
+    { top: "#001a4d", bottom: "#003366" }, // ステージ1 青夜空
+    { top: "#4b3b1b", bottom: "#c9a66b" }, // ステージ2 夕暮れ
+    { top: "#0a0a23", bottom: "#3c3c61" }, // ステージ3 深夜
+  ];
+
+  // 敵タイプ
+  // type: "ground" (地上), "fly" (飛行), "boss" (ボス)
+  // 敵の速度等はdifficultyLevelで調整
+
+  document.addEventListener("keydown", e => {
+    if (e.code === "Space") keys.space = true;
+  });
+  document.addEventListener("keyup", e => {
+    if (e.code === "Space") keys.space = false;
+  });
+  canvas.addEventListener("click", () => keys.space = true);
+
+  function setupSkinButtons() {
+    const skinDiv = document.getElementById("skinSelect");
+    skinDiv.innerHTML = "";
+    skins.forEach((color, index) => {
+      const btn = document.createElement("div");
+      btn.className = "skinBtn";
+      btn.style.background = color;
+      btn.onclick = () => currentSkin = index;
+      skinDiv.appendChild(btn);
+    });
+  }
+
+  function initBackgroundObjects() {
+    clouds = [];
+    stars = [];
+    for(let i=0; i<20; i++) {
+      stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height/2,
+        size: Math.random()*1.5 + 0.5,
+        flicker: Math.random()*0.05 + 0.02,
+        alpha: Math.random()
+      });
+    }
+    for(let i=0; i<5; i++) {
+      clouds.push({
+        x: Math.random()*canvas.width,
+        y: 50 + Math.random()*50,
+        speed: 0.3 + Math.random()*0.2,
+        width: 80 + Math.random()*40,
+        height: 30 + Math.random()*20
+      });
+    }
+  }
+
+  function startGame() {
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("gameOverScreen").style.display = "none";
+    score = 0;
+    frame = 0;
+    difficultyLevel = 1;
+    isGameOver = false;
+    invincible = false;
+    invincibleTimer = 0;
+
+    platforms = generatePlatforms();
+    enemies = [];
+    items = [];
+    bosses = [];
+
+    player = {
+      x: 100,
+      y: platforms[0].y - 120,
+      width: 30,
+      height: 30,
+      vy: 0,
+      onGround: false,
+      blinkFrames: 0
+    };
+
+    initBackgroundObjects();
+    loop();
+  }
+
+  // 足場生成（難易度で間隔調整）
+  function generatePlatforms() {
+    let list = [];
+    let baseInterval = 110;
+    for (let i = 0; i < 20; i++) {
+      let interval = baseInterval + difficultyLevel * 5;
+      let x = 200 + i * interval;
+      let y = Math.random() * 100 + 180;
+      list.push({ x, y, width: 90, height: 10 });
+    }
+    return list;
+  }
+
+  // 背景描画（グラデーション）
+  function drawBackground(stageIndex) {
+    let bg = backgrounds[stageIndex] || backgrounds[backgrounds.length-1];
+    let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, bg.top);
+    gradient.addColorStop(1, bg.bottom);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 星の描画（点滅）
+    stars.forEach(s => {
+      s.alpha += s.flicker;
+      if(s.alpha > 1) s.alpha = 1;
+      if(s.alpha < 0) s.alpha = 0;
+      ctx.fillStyle = `rgba(255,255,255,${s.alpha.toFixed(2)})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+      ctx.fill();
+    });
+
+    // 雲の描画（シンプルな白丸と楕円）
+    clouds.forEach(c => {
+      ctx.fillStyle = "rgba(255,255,255,0.8)";
+      ctx.beginPath();
+      ctx.ellipse(c.x, c.y, c.width/2, c.height/2, 0, 0, Math.PI*2);
+      ctx.fill();
+    });
+  }
+
+  function updateBackgroundObjects() {
+    clouds.forEach(c => {
+      c.x -= c.speed;
+      if (c.x + c.width/2 < 0) {
+        c.x = canvas.width + c.width/2;
+        c.y = 50 + Math.random()*50;
+      }
+    });
+  }
+
+  function update() {
+    frame++;
+    score = Math.floor(frame / 5);
+    difficultyLevel = Math.floor(score / 100) + 1;
+
+    if (player.blinkFrames > 0) player.blinkFrames--;
+    if (invincible) {
+      invincibleTimer--;
+      if (invincibleTimer <= 0) invincible = false;
+    }
+
+    player.vy += 0.6;
+    player.y += player.vy;
+    player.onGround = false;
+
+    // 足場移動＆足場再生成
+    platforms.forEach(p => p.x -= 1.5 * difficultyLevel);
+    platforms = platforms.filter(p => p.x + p.width > 0);
+    if (platforms.length < 20) {
+      let lastX = platforms.length > 0 ? platforms[platforms.length - 1].x : 200;
+      let interval = 110 + difficultyLevel * 5;
+      let y = Math.random() * (50 + 10 * difficultyLevel) + 150;
+      platforms.push({ x: lastX + interval, y, width: 60, height: 10 });
+    }
+
+    // 足場との接触判定
+    for (let p of platforms) {
+      if (player.x + player.width > p.x && player.x < p.x + p.width) {
+        if (player.y + player.height > p.y && player.y + player.height < p.y + p.height + 10 && player.vy >= 0) {
+          player.y = p.y - player.height;
+          player.vy = 0;
+          doubleJumped = false;
+          player.onGround = true;
+        }
+      }
+    }
+
+    // ジャンプ操作
+    if (keys.space) {
+      if (player.onGround) {
+        player.vy = -12;
+        player.onGround = false;
+      } else if (!doubleJumped) {
+        player.vy = -12;
+        doubleJumped = true;
+      }
+      keys.space = false;
+    }
+
+    // 落下チェック
+    if (player.y > canvas.height) {
+      if (!invincible) {
+        endGame();
+        return;
+      }
+    }
+
+    // 敵＆アイテム生成頻度調整（難易度に比例）
+    let enemySpawnInterval = Math.max(60, 100 - difficultyLevel * 5);
+    let itemSpawnInterval = Math.max(180, 250 - difficultyLevel * 10);
+
+    if (frame % enemySpawnInterval === 0) {
+      // 5%の確率で飛行敵を出す
+      const type = Math.random() < 0.15 ? "fly" : "ground";
+      let enemyY = type === "ground" ? ground - 20 : ground - 120 - Math.random()*50;
+      enemies.push({
+        x: canvas.width,
+        y: enemyY,
+        width: 30,
+        height: 30,
+        vy: 0,
+        type,
+        directionY: Math.random() < 0.5 ? 1 : -1, // 上下移動方向
+      });
+    }
+
+    if (frame % itemSpawnInterval === 0) {
+      items.push({ x: canvas.width, y: ground - 40, width: 20, height: 20 });
+    }
+
+    // ボス出現判定（スコアが500, 1000, 1500の直前で）
+    if ((score === 290 || score === 490 || score === 690) && bosses.length === 0) {
+      bosses.push({
+        x: canvas.width,
+        y: ground - 60,
+        width: 50,
+        height: 60,
+        vy: 0,
+        directionY: 1,
+        type: "boss"
+      });
+    }
+
+    // 敵の動き更新
+    enemies.forEach(e => {
+      e.x -= 2.5 * difficultyLevel;
+      if (e.type === "fly") {
+        e.y += e.directionY * 1.5;
+        if (e.y < ground - 150) e.directionY = 1;
+        if (e.y > ground - 80) e.directionY = -1;
+      }
+    });
+    enemies = enemies.filter(e => e.x + e.width > 0);
+
+    // ボスの動き更新（上下往復）
+    bosses.forEach(b => {
+      b.x -= 1.5 * difficultyLevel * 0.5;
+      b.y += b.directionY * 1;
+      if (b.y < ground - 100) b.directionY = 1;
+      if (b.y > ground - 60) b.directionY = -1;
+    });
+    bosses = bosses.filter(b => b.x + b.width > 0);
+
+    // アイテムの動き
+    items.forEach(i => i.x -= 2 * difficultyLevel);
+    items = items.filter(i => i.x + i.width > 0);
+
+    // プレイヤーと敵の衝突判定
+    // 敵（ground, fly）は踏んだら倒せる。踏めなければダメージ
+    enemies = enemies.filter(e => {
+      if (player.x < e.x + e.width && player.x + player.width > e.x &&
+          player.y < e.y + e.height && player.y + player.height > e.y) {
+        if (player.vy > 0 && player.y + player.height - e.y < 10) {
+          // 踏んだ判定
+          player.vy = -12;
+          score += 10;
+          return false;
+        } else if (!invincible) {
+          endGame();
+          return false;
+        }
+      }
+      return true;
+    });
+
+    // プレイヤーとボス衝突判定（踏んでも無効。接触で即死）
+    bosses.forEach(b => {
+      if (player.x < b.x + b.width && player.x + player.width > b.x &&
+          player.y < b.y + b.height && player.y + player.height > b.y) {
+        if (!invincible) endGame();
+      }
+    });
+
+    // プレイヤーとアイテムの衝突判定（無敵付与）
+    items = items.filter(i => {
+      if (player.x < i.x + i.width && player.x + player.width > i.x &&
+          player.y < i.y + i.height && player.y + player.height > i.y) {
+        invincible = true;
+        invincibleTimer = 180;
+        return false;
+      }
+      return true;
+    });
+
+    updateBackgroundObjects();
+  }
+
+  function draw() {
+    // ステージの判定：0,1,2 ステージ
+    let stageIndex = Math.min(Math.floor(score / 500), backgrounds.length - 1);
+
+    drawBackground(stageIndex);
+
+    // 地面
+    ctx.fillStyle = "green";
+    ctx.fillRect(0, ground + 20, canvas.width, 40);
+
+    // 足場
+    for (let p of platforms) {
+      ctx.fillStyle = "brown";
+      ctx.fillRect(p.x, p.y, p.width, p.height);
+    }
+
+    // 敵描画
+    enemies.forEach(e => {
+      ctx.fillStyle = e.type === "fly" ? "purple" : "black";
+      ctx.fillRect(e.x, e.y, e.width, e.height);
+    });
+
+    // ボス描画（赤く大きめ）
+    bosses.forEach(b => {
+      ctx.fillStyle = "darkred";
+      ctx.fillRect(b.x, b.y, b.width, b.height);
+      // 簡易目玉描画
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(b.x + b.width*0.3, b.y + b.height*0.4, 6, 0, Math.PI*2);
+      ctx.arc(b.x + b.width*0.7, b.y + b.height*0.4, 6, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = "black";
+      ctx.beginPath();
+      ctx.arc(b.x + b.width*0.3, b.y + b.height*0.4, 3, 0, Math.PI*2);
+      ctx.arc(b.x + b.width*0.7, b.y + b.height*0.4, 3, 0, Math.PI*2);
+      ctx.fill();
+    });
+
+    // アイテム描画（金色の丸）
+    for (let i of items) {
+      ctx.fillStyle = "gold";
+      ctx.beginPath();
+      ctx.arc(i.x + i.width/2, i.y + i.height/2, 10, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // プレイヤー描画（無敵時は点滅）
+    if (player.blinkFrames % 4 < 2 || player.blinkFrames === 0 || invincible) {
+      ctx.fillStyle = skins[currentSkin];
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+    // スコア表示
+    ctx.fillStyle = "white";
+    ctx.font = "16px Arial";
+    ctx.fillText("Score: " + score, 10, 20);
+
+    // 無敵タイマー表示
+    if (invincible) {
+      ctx.fillStyle = "yellow";
+      ctx.font = "14px Arial";
+      ctx.fillText(`無敵: ${(invincibleTimer/60).toFixed(1)}秒`, 350, 20);
+    }
+  }
+
+  function loop() {
+    update();
+    draw();
+    if (!isGameOver) requestAnimationFrame(loop);
+  }
+
+  function endGame() {
+    isGameOver = true;
+    document.getElementById("gameOverScreen").style.display = "block";
+    document.getElementById("finalScore").textContent = `スコア: ${score}`;
+    saveScore(score);
+    renderRanking();
+  }
+
+  function saveScore(score) {
+    let scores = JSON.parse(localStorage.getItem("jumpGameScores")) || [];
+    scores.push(score);
+    scores.sort((a, b) => b - a);
+    if (scores.length > 5) scores = scores.slice(0, 5);
+    localStorage.setItem("jumpGameScores", JSON.stringify(scores));
+  }
+
+  function renderRanking() {
+    const list = document.getElementById("rankingList");
+    list.innerHTML = "";
+    let scores = JSON.parse(localStorage.getItem("jumpGameScores")) || [];
+    for (let s of scores) {
+      const li = document.createElement("li");
+      li.textContent = s;
+      list.appendChild(li);
+    }
+  }
+
+  let doubleJumped = false;
+  setupSkinButtons();
+
+  function backPage() {
+    window.history.go(-1);
+  }
+</script>
+<div class="rule-explain">
+    <h2>ルール説明</h2>
+    <p>スペースキーまたはタップでジャンプ！</p>
+    <p>敵を踏んでスコアを稼ごう！</p>
+    <p>アイテムを取ると無敵状態に！</p>
+    <p>落下するとゲームオーバー！</p>
+    <p>スキンを選んでスタート！</p>
+</div>
+<div class="backBtn">
+    <button id="backBtn" onclick="backPage();">← 戻る</button>
+</div>
+<footer>
+    <p class="footer-text">© 2025 じゃくのサイト |    ジャンプタイミング All rights reserved.</p>
+</footer>
+</body>
+</html>
