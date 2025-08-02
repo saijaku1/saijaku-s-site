@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>神経衰弱ゲーム（3人以上は20ペア固定）</title>
+  <link rel="icon" href="../../image/jaku.png">
+  <style>
+   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #f0f0f0;
+  text-align: center;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 15px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.card {
+  perspective: 1000px;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+  cursor: default;
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0;
+  user-select: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-front {
+  background: #37474f;
+  font-size: 36px;
+  color: #90caf9;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: #ffffff;
+  font-size: 36px;
+  color: #222;
+}
+
+.card:hover:not(.flipped) .card-inner {
+  transform: scale(1.05);
+}
+
+.controls {
+  margin: 15px 0;
+}
+
+button {
+  background: #1e88e5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  font-size: 1em;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background: #1565c0;
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+select {
+  font-size: 1em;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #999;
+}
+
+#timer {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+#message {
+  margin-top: 15px;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #81c784;
+}
+
+.ranking {
+  margin-top: 20px;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  background: #ffffff10;
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+#turn-info {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+#scores {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  font-weight: bold;
+}
+  </style>
+</head>
+<body>
+  <h1>神経衰弱ゲーム🃏</h1>
+
+  <div class="controls">
+    <label>人数:
+      <select id="players">
+        <option value="1">1人</option>
+        <option value="2">2人</option>
+        <option value="3">3人</option>
+        <option value="4">4人</option>
+      </select>
+    </label>
+    <h3>3人以上でプレイする場合は、難易度に関係なく20ペアでプレイします。</h3>
+    <label>難易度:
+      <select id="difficulty">
+        <option value="easy">かんたん（3ペア）</option>
+        <option value="normal" selected>ふつう（6ペア）</option>
+        <option value="hard">むずかしい（10ペア）</option>
+      </select>
+    </label>
+    <button id="start-btn">スタート</button>
+    <button id="reset-btn" disabled>リセット</button>
+  </div>
+  
+  <div id="turn-info"></div>
+  <div id="scores"></div>
+  
+  <div id="timer">タイマー: 0 秒</div>
+  <div class="game-board" id="game-board"></div>
+  <p id="message"></p>
+  <div class="ranking" id="ranking"></div>
+
+  <script>
+    const board = document.getElementById("game-board");
+    const message = document.getElementById("message");
+    const timerDisplay = document.getElementById("timer");
+    const difficultySelect = document.getElementById("difficulty");
+    const startBtn = document.getElementById("start-btn");
+    const resetBtn = document.getElementById("reset-btn");
+    const rankingDiv = document.getElementById("ranking");
+    const playersSelect = document.getElementById("players");
+    const turnInfo = document.getElementById("turn-info");
+    const scoresDiv = document.getElementById("scores");
+
+    const iconURLs = [
+      "🍎","🍌","🍇","🍓","🍑","🍍","🍒","🥝","🍉","🥥",
+      "🍋","🥭","🍈","🍏","🍐","🥑","🍅","🥕","🌽","🍆"
+    ];
+
+    let cards = [];
+    let flippedCards = [];
+    let matchedCount = 0;
+    let seconds = 0;
+    let timer = null;
+    let gameStarted = false;
+    let canClick = true;
+
+    let playerCount = 1;
+    let currentPlayer = 0;
+    let scores = [];
+
+    function shuffle(array) {
+      return array.sort(() => 0.5 - Math.random());
+    }
+
+    function getPairCount(difficulty, players) {
+      if (players >= 3) return 20;
+      if (difficulty === "easy") return 3;
+      if (difficulty === "hard") return 10;
+      return 6;
+    }
+
+    function getIconsByPairCount(pairCount) {
+      return iconURLs.slice(0, pairCount);
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        seconds++;
+        timerDisplay.innerText = `タイマー: ${seconds} 秒`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timer);
+    }
+
+    function saveScore(difficulty, players, time) {
+      const key = `ranking_${difficulty}_${players}p`;
+      const list = JSON.parse(localStorage.getItem(key)) || [];
+      list.push(time);
+      list.sort((a, b) => a - b);
+      const top3 = list.slice(0, 3);
+      localStorage.setItem(key, JSON.stringify(top3));
+    }
+
+    function displayRanking() {
+      const diff = difficultySelect.value;
+      const players = playersSelect.value;
+      const key = `ranking_${diff}_${players}p`;
+      const list = JSON.parse(localStorage.getItem(key)) || [];
+      rankingDiv.innerHTML = `<h3>🏆 ${players}人 ${diff.toUpperCase()} ランキング</h3>`;
+      if (list.length === 0) {
+        rankingDiv.innerHTML += "<p>記録なし</p>";
+      } else {
+        rankingDiv.innerHTML +=
+          "<ol>" + list.map((t) => `<li>${t} 秒</li>`).join("") + "</ol>";
+      }
+    }
+
+    function updateTurnInfo() {
+      if (playerCount === 1) {
+        turnInfo.innerText = "";
+        return;
+      }
+      turnInfo.innerText = `🎯 プレイヤー ${currentPlayer + 1} のターン`;
+    }
+
+    function updateScores() {
+      scoresDiv.innerHTML = scores
+        .map((s, i) => `👤P${i + 1}: ${s}点`)
+        .join("　");
+    }
+
+    function nextPlayer() {
+      currentPlayer = (currentPlayer + 1) % playerCount;
+      updateTurnInfo();
+    }
+
+    function showWinner() {
+      const maxScore = Math.max(...scores);
+      const winners = scores
+        .map((s, i) => (s === maxScore ? `P${i + 1}` : null))
+        .filter((v) => v !== null);
+
+      if (winners.length === 1) {
+        message.innerText = `🎉 勝者: ${winners[0]}（${maxScore}点）`;
+      } else {
+        message.innerText = `🤝 引き分け: ${winners.join(" & ")}（${maxScore}点）`;
+      }
+    }
+
+    function initGame() {
+      playerCount = Number(playersSelect.value);
+      currentPlayer = 0;
+      scores = Array(playerCount).fill(0);
+
+      const difficulty = difficultySelect.value;
+      const pairCount = getPairCount(difficulty, playerCount);
+      const selectedIcons = getIconsByPairCount(pairCount);
+      cards = shuffle([...selectedIcons, ...selectedIcons]);
+
+      board.innerHTML = "";
+      flippedCards = [];
+      matchedCount = 0;
+      seconds = 0;
+      canClick = true;
+      timerDisplay.innerText = `タイマー: 0 秒`;
+      message.innerText = "";
+      rankingDiv.innerHTML = "";
+      stopTimer();
+      displayRanking();
+      updateScores();
+      updateTurnInfo();
+
+      cards.forEach((icon, index) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.dataset.icon = icon;
+        card.dataset.index = index;
+
+        const cardInner = document.createElement("div");
+        cardInner.classList.add("card-inner");
+
+        const cardFront = document.createElement("div");
+        cardFront.classList.add("card-front");
+        cardFront.innerText = "🂠";
+
+        const cardBack = document.createElement("div");
+        cardBack.classList.add("card-back");
+        cardBack.innerText = icon;
+
+        cardInner.appendChild(cardFront);
+        cardInner.appendChild(cardBack);
+        card.appendChild(cardInner);
+
+        card.addEventListener("click", () => {
+          if (
+            !gameStarted ||
+            card.classList.contains("flipped") ||
+            flippedCards.length === 2 ||
+            flippedCards.includes(card) ||
+            !canClick
+          ) return;
+
+          card.classList.add("flipped");
+          flippedCards.push(card);
+
+          if (flippedCards.length === 2) {
+            canClick = false;
+
+            const [first, second] = flippedCards;
+            if (first.dataset.icon === second.dataset.icon) {
+              matchedCount++;
+              // 得点処理（複数プレイヤーの場合）
+              if (playerCount > 1) {
+                scores[currentPlayer]++;
+                updateScores();
+              }
+              flippedCards = [];
+              canClick = true;
+
+              if (matchedCount === selectedIcons.length) {
+                stopTimer();
+                if (playerCount === 1) {
+                  message.innerText = `🎉 クリア！（${seconds}秒）`;
+                  saveScore(difficulty, playerCount, seconds);
+                  displayRanking();
+                } else {
+                  showWinner();
+                }
+                startBtn.disabled = false;
+                resetBtn.disabled = true;
+                difficultySelect.disabled = false;
+                playersSelect.disabled = false;
+                gameStarted = false;
+              }
+            } else {
+              setTimeout(() => {
+                flippedCards.forEach((c) => c.classList.remove("flipped"));
+                flippedCards = [];
+                canClick = true;
+                if (playerCount > 1) {
+                  nextPlayer();
+                }
+              }, 1000);
+            }
+          }
+        });
+
+        board.appendChild(card);
+      });
+    }
+
+    startBtn.addEventListener("click", () => {
+      gameStarted = true;
+      initGame();
+      startTimer();
+      startBtn.disabled = true;
+      resetBtn.disabled = false;
+      difficultySelect.disabled = true;
+      playersSelect.disabled = true;
+    });
+
+    resetBtn.addEventListener("click", () => {
+      gameStarted = false;
+      stopTimer();
+      initGame();
+      startBtn.disabled = false;
+      resetBtn.disabled = true;
+      difficultySelect.disabled = false;
+      playersSelect.disabled = false;
+      message.innerText = "";
+    });
+
+    difficultySelect.addEventListener("change", () => {
+      if (!gameStarted) {
+        initGame();
+      }
+    });
+
+    playersSelect.addEventListener("change", () => {
+      if (!gameStarted) {
+        initGame();
+      }
+    });
+
+    initGame();
+  </script>
+</body>
+</html>
