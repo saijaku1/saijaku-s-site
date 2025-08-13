@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打鍵速度＆正確性計算ツール</title>
+    <style>
+         body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(-45deg, #6fb1fc, #4364f7, #2bc0e4, #67b26f);
+        background-size: 400% 400%;
+        animation: gradientMove 15s ease infinite;
+        padding: 20px;
+        color: #fff;
+    }
+    @keyframes gradientMove {
+        0% {background-position: 0% 50%;}
+        50% {background-position: 100% 50%;}
+        100% {background-position: 0% 50%;}
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
+    .box {
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        max-width: 500px;
+        margin: 0 auto 25px auto;
+        transition: transform 0.2s ease;
+    }
+    .box:hover {
+        transform: translateY(-3px);
+    }
+    label {
+        display: block;
+        margin-top: 12px;
+        font-weight: bold;
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+    }
+    input:focus {
+        border-color: #2bc0e4;
+        outline: none;
+    }
+    table {
+        width: 100%;
+        margin-top: 15px;
+        border-collapse: collapse;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    th, td {
+        padding: 10px;
+        text-align: center;
+    }
+    th {
+        background: #f0f4ff;
+        font-weight: bold;
+    }
+    tr:nth-child(even) {
+        background: #f9f9f9;
+    }
+    tr:nth-child(odd) {
+        background: #ffffff;
+    }
+    .green {
+        background: #c8facc !important;
+    }
+    .yellow {
+        background: #fff9c4 !important;
+    }
+    .red {
+        background: #ffcccc !important;
+    }
+    small {
+        font-size: 0.85rem;
+        color: #666;
+    }
+    footer {
+        border:1px solid #fff;
+        width:100%;
+        padding: 10px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        box-shadow:inset 0 0 10px rgba(0,0,0,0.1);
+        margin-top: 30px;
+        font-size: 0.9rem;
+        color: #fff;
+    }
+    footer p {
+        font-size:1.2em;
+        margin: 0;
+    }
+    </style>
+</head>
+<body>
+
+    <h1>打鍵速度＆正確性計算ツール</h1>
+
+    <!-- 入力欄 -->
+    <div class="box">
+        <label>1秒間の打鍵数:</label>
+        <input type="number" id="speed" step="0.01" placeholder="例: 16">
+
+        <label>1分間の総打鍵数:</label>
+        <input type="number" id="perMinute" step="0.01" placeholder="例: 960">
+
+        <label>ミス数（全体）:</label>
+        <input type="number" id="miss" step="1" placeholder="例: 30">
+
+        <label>計算する秒数（カンマ区切り）:</label>
+        <input type="text" id="customTimes" value="60,50,40,30,20,10">
+        <small>例: 60,45,15 など</small>
+    </div>
+
+    <!-- 結果表 -->
+    <div class="box">
+        <table id="resultTable">
+            <thead>
+                <tr>
+                    <th>秒数</th>
+                    <th>総打鍵数</th>
+                    <th>正しい打鍵数</th>
+                    <th>正確性</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        const speedInput = document.getElementById('speed');
+        const perMinuteInput = document.getElementById('perMinute');
+        const missInput = document.getElementById('miss');
+        const customTimesInput = document.getElementById('customTimes');
+        const tbody = document.querySelector('#resultTable tbody');
+
+        function calculate() {
+            let speed = parseFloat(speedInput.value);
+            let perMinute = parseFloat(perMinuteInput.value);
+
+            // 双方向計算
+            if (!isNaN(speed) && (isNaN(perMinute) || document.activeElement === speedInput)) {
+                perMinute = speed * 60;
+                perMinuteInput.value = perMinute.toFixed(2);
+            } else if (!isNaN(perMinute) && (isNaN(speed) || document.activeElement === perMinuteInput)) {
+                speed = perMinute / 60;
+                speedInput.value = speed.toFixed(2);
+            }
+
+            const miss = parseInt(missInput.value) || 0;
+            const times = customTimesInput.value.split(',').map(t => parseFloat(t.trim())).filter(t => !isNaN(t));
+
+            tbody.innerHTML = '';
+
+            times.forEach(sec => {
+                const total = speed * sec;
+                const correct = total - miss;
+                const accuracy = total > 0 ? (correct / total) * 100 : 0;
+
+                // 色分け
+                let accClass = '';
+                if (accuracy >= 90) accClass = 'green';
+                else if (accuracy >= 80) accClass = 'yellow';
+                else accClass = 'red';
+
+                const row = `
+                    <tr>
+                        <td>${sec} 秒</td>
+                        <td>${total.toFixed(2)}</td>
+                        <td>${correct.toFixed(2)}</td>
+                        <td class="${accClass}">${accuracy.toFixed(2)}%</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // 入力イベント
+        [speedInput, perMinuteInput, missInput, customTimesInput].forEach(el => {
+            el.addEventListener('input', calculate);
+        });
+    </script>
+<footer>
+    <p>&copy;2025 じゃくのサイト | 打鍵速度＆正確性計算ツール </p>
+</footer>
+</body>
+</html>
