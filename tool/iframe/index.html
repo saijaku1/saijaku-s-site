@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../image/jaku.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>iframeサイト|最弱のサイト</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #48aba4;
+            font-family: Arial, sans-serif;
+        }
+        .text {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .question {
+            margin: 30px;
+            font-size: 1.2em;
+            color: #333;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+          border-bottom:double 1px black;
+        }
+        .answer {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            margin-top: 10px;
+            font-size: 1em;
+            color: #555;
+        }
+        iframe {
+            width: 90%;
+            height: 700px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 1em;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ddd;
+        }
+        .close-button {
+            background-color: #ff6b6b;
+            color: white;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Iframeサイト</h1>
+    <h2>この下にURLを貼り付けよう！</h2>
+    <input type="text" class="text" id="urlInput" placeholder="http://もしくはhttps://から始まるURLを入力">
+    <button onclick="loadIframe()">表示</button>
+    <iframe id="iframeDisplay" src=""></iframe>
+    
+    <button onclick="scrollToQuestion()">質問を見る</button>
+    
+    <section id="questionSection">
+        <div class="question">Q1.たまに接続が拒否されましたがでます。どうすればいいでしょうか？</div>
+        <p class="answer">理由は<b>セキュリティ</b>!多くのサイト（特に大手サイト）は、悪意のある攻撃から自サイトを守るために、<br>他のサイトに自サイトのコンテンツを埋め込ませないようにしています。<br>これにより、フィッシング攻撃やクロスサイトスクリプティング（XSS）攻撃を防止しているのです。<br>
+          もしくは、URLのタイプミスの可能性があります。</p>
+        <div class="question"><b>対処法</b></div>
+        <p class="answer">テキストに<b>https://proxysite.com</b>もしくは<b>https://www.activetk.jp/tools/iframe</b>を入れてアクセスします。<br>(二重プロキシとなりセキュリティが適用されなくなる)。その後に、接続が拒否されるサイトのURLを貼ってください。</p>
+      
+       <div class="question"><b>Q2.なんでこんなん作ったの？</b></div>
+        <p class="answer">実は、学校のPCで制限されたサイトにアクセスさせるための秘密兵器としてこのサイトを開発しちゃたんだ☆！<br>友達に「勉強のため」って言い訳しながら、好きな動画やゲームにアクセスできるようにしたかったんだよね〜<br>だって、情報収集は大事だけどさ、時には少し遊ぶことも大切だからね！😄</p>
+        
+     <div class="question"><b>Q3.Q1やったけどそれでもできない！</b></div>
+        <p class="answer">その場合はこのサイト(https://mysite.f5.si/made/iframe)のURLをコピーしまくって、テキストに入りつけて下さい！<br>(この場合三重プロキシとなりセキュリティがよりセキュリティが適用されにくくなる)<br>それでもできない場合は、残念ですがあきらめてください。</p>
+        <button class="close-button" onclick="closeQuestion()">閉じる</button>
+
+    </section>
+
+    <script>
+        function loadIframe() {
+            const urlInput = document.getElementById('urlInput');
+            const iframeDisplay = document.getElementById('iframeDisplay');
+            const url = urlInput.value;
+
+            if (url.startsWith('http://') || url.startsWith('https://')) {
+                iframeDisplay.src = url;
+            } else {
+                alert('有効なURLを入力してください（http://またはhttps://で始まるURL）。');
+            }
+        }
+
+        function scrollToQuestion() {
+            const questionSection = document.getElementById('questionSection');
+            const questions = questionSection.querySelectorAll('.question');
+            const answers = questionSection.querySelectorAll('.answer');
+            const closeButton = questionSection.querySelector('.close-button');
+
+            questionSection.scrollIntoView({ behavior: 'smooth' });
+
+            questions.forEach((question) => {
+                question.style.opacity = 1;
+            });
+            answers.forEach((answer) => {
+                answer.style.opacity = 1;
+            });
+            closeButton.style.display = 'inline-block';
+        }
+
+        function closeQuestion() {
+            const questionSection = document.getElementById('questionSection');
+            const questions = questionSection.querySelectorAll('.question');
+            const answers = questionSection.querySelectorAll('.answer');
+            const closeButton = questionSection.querySelector('.close-button');
+
+            questions.forEach((question) => {
+                question.style.opacity = 0;
+            });
+            answers.forEach((answer) => {
+                answer.style.opacity = 0;
+            });
+            closeButton.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
