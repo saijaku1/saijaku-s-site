@@ -1,0 +1,184 @@
+  body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
+}
+.container {
+  width: 800px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.taskFormContainer {
+  margin-bottom: 20px;
+}
+.taskForm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.taskField, .timeField, .deadlineField {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+}
+.taskAddButton {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.taskAddButton:hover {
+  background-color: #218838;
+}
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.controls input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.allDoneButton {
+  background-color: #007bff;
+  color: white;
+}
+.allDoneButton:hover {
+  background-color: #0056b3;
+}
+.allDeleteButton {
+  background-color: #dc3545;
+  color: white;
+}
+.allDeleteButton:hover {
+  background-color: #c82333;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+}
+.done {
+  text-decoration: line-through;
+  color: gray;
+}
+.progressBarContainer {
+  width: 100%;
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+.progressBar {
+  width: 0;
+  height: 100%;
+  background-color: #28a745;
+  transition: width 0.3s;
+}
+.timerButton {
+  padding: 8px 16px;
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.timerButton:hover {
+  background-color: #138496;
+}
+.doneButton {
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.doneButton:hover {
+  background-color: #218838;
+}
+.deleteButton {
+  padding: 8px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  top: 26em;
+  right: 27em;
+  text-align: center;
+}
+.deleteButton:hover {
+  background-color: #c82333;
+}
+@media (max-width:800px){
+    .container{
+        width:70%;
+    }
+    .taskFormContainer{
+        width: 50%;
+    }
+    #title{
+        font-size:12px;
+    }
+    .taskField{
+        width:60px;
+    }
+    .timeField{
+        width:60px;
+    }
+    .timeField{
+        width:50px;
+    }
+    .deadlineField{
+        width:50px;
+    }
+    .deleteButton{
+        left:26em;
+        top:24em;
+    }
+}
+
+footer {
+        border:1px solid #fff;
+        width:100%;
+        padding: 10px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        box-shadow:inset 0 0 10px rgba(0,0,0,0.1);
+        margin-top: 30px;
+        font-size: 0.9rem;
+        color: #fff;
+    }
+    footer p {
+        font-size:1.2em;
+        margin: 0;
+    }
