@@ -1,0 +1,39 @@
+<!DOCTYPE html> 
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学習管理ツール</title> 
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="../../image/jaku.png"> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script> 
+  </head>
+  <body>
+    <header>
+      <h1>学習管理ツール</h1> 
+    </header> 
+    <main>
+      <h2>学習項目を追加</h2> 
+      <!-- 学習項目追加フォーム --> <section id="subject-form">
+        <label for="subject-name">学習項目名：</label>
+        <input type="text" id="subject-name" placeholder="学習項目を入力"> 
+        <label for="subject-goal">目標：</label> 
+        <input type="text" id="subject-goal" placeholder="目標を入力"> 
+        <label for="subject-progress">進捗度（%）:</label>
+        <input type="number" id="subject-progress" min="0" max="100" placeholder="進捗を入力"> 
+        <label for="subject-due-date">期日：</label> 
+        <input type="date" id="subject-due-date"> 
+        <button id="save-subject-btn">保存</button>
+      </section> <section id="subject-list"> 
+          <h3>学習項目リスト</h3> 
+          <ul id="subject-items"></ul> 
+      </section> 
+      <section id="progress-chart-section">
+        <h3>進捗グラフ</h3> 
+        <canvas id="progress-chart"></canvas> 
+      </section> 
+    </main> 
+    <script src="script.js"></script>
+  </body>
+</html>
