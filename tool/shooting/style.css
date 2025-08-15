@@ -1,0 +1,162 @@
+body {
+    background: #001f3f;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+    margin: 0; padding: 0;
+    text-align: center;
+  }
+  #gameArea {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    margin: 20px auto;
+    background: linear-gradient(to bottom, #001f3f, #0074D9);
+    border: 3px solid #005ea2;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #0074D9;
+  }
+  #player {
+    position: absolute;
+    bottom: 20px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(45deg, #00ff99, #006622);
+    border-radius: 8px;
+    box-shadow: 0 0 10px #00ff99;
+    transition: filter 0.2s;
+  }
+  .player-hit {
+    animation: playerBlink 0.15s linear infinite;
+  }
+  @keyframes playerBlink {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(0.3) saturate(3); }
+  }
+  .bullet {
+    position: absolute;
+    width: 4px;
+    height: 10px;
+    background: #ffff66;
+    border-radius: 2px;
+    box-shadow: 0 0 6px #ffff66;
+  }
+  .enemy {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+  }
+  .enemy1 { background: #f44336; }
+  .enemy2 { background: #ff9800; }
+  .enemy3 { background: #2196f3; }
+  .enemyBullet {
+    position: absolute;
+    width: 6px;
+    height: 12px;
+    background: #ff3300;
+    border-radius: 3px;
+    box-shadow: 0 0 8px #ff3300;
+  }
+  #score, #level, #hearts {
+    font-weight: bold;
+    color: #e0e0e0;
+    text-shadow: 0 0 4px #000;
+    margin: 5px;
+    user-select: none;
+  }
+  #hearts {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .heart {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(45deg, #ff0000, #cc0000);
+    clip-path: polygon(
+      50% 15%, 61% 10%, 75% 10%, 85% 25%, 85% 45%, 75% 65%, 50% 90%, 25% 65%, 15% 45%, 15% 25%, 25% 10%, 39% 10%
+    );
+    box-shadow: 0 0 8px #ff4444;
+  }
+  #message {
+    font-size: 18px;
+    height: 24px;
+    margin-bottom: 10px;
+  }
+  #startButton {
+    margin: 12px auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #004466;
+    background: #aaffff;
+    border: 2px solid #0088aa;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #00ccff;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  #startButton:hover:not(:disabled) {
+    background: #88eeff;
+  }
+  #startButton:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: default;
+    box-shadow: none;
+  }
+  #superShotBarContainer {
+    width: 80%;
+    height: 16px;
+    background: #333;
+    border-radius: 8px;
+    margin: 5px auto;
+    overflow: hidden;
+  }
+  #superShotBar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #0ff, #06f);
+    transition: width 0.3s;
+  }
+  #ranking {
+    width: 600px;
+    margin: 10px auto;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: left;
+  }
+  #ranking h3 {
+    margin-bottom: 5px;
+  }
+  #ranking ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  #ranking li {
+    background: rgba(0,0,0,0.3);
+    margin-bottom: 3px;
+    padding: 5px 8px;
+    border-radius: 4px;
+  }
+  #clearRankingBtn {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: #ff5555;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+  }
+  #clearRankingBtn:hover {
+    background-color: #ff0000;
+  }
