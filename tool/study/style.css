@@ -1,0 +1,183 @@
+/* ベースレイアウトとフォント */
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #e3f2fd, #f9f9f9);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  color: #333;
+}
+
+/* ヘッダー */
+header {
+  background: linear-gradient(90deg, #34495e, #2c3e50);
+  color: white;
+  padding: 25px 40px;
+  width: 100%;
+  text-align: center;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+/* メインコンテンツ */
+main {
+  background-color: #fff;
+  width: 90%;
+  max-width: 950px;
+  padding: 40px;
+  margin-top: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+main:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* セクション */
+section {
+  margin-bottom: 50px;
+}
+
+/* サブタイトル */
+h2, h3 {
+  font-size: 1.8rem;
+  color: #34495e;
+  margin-bottom: 20px;
+  border-left: 6px solid #3498db;
+  padding-left: 12px;
+  font-weight: 600;
+}
+
+/* フォームのラベルとインプット */
+label {
+  display: block;
+  font-size: 1rem;
+  color: #2c3e50;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: 2px solid #dfe6e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus {
+  border-color: #3498db;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+  outline: none;
+}
+
+/* ボタン */
+button {
+  background: linear-gradient(90deg, #3498db, #2980b9);
+  color: white;
+  font-size: 1rem;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #3cb0fd, #3498db);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+/* 学習項目リスト */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  background-color: #f4f6f9;
+  margin: 15px 0;
+  padding: 18px 25px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+li:hover {
+  background-color: #eaf2f8;
+  transform: translateY(-3px);
+}
+
+/* グラフ */
+#progress-chart-section {
+  margin-top: 40px;
+  text-align: center;
+}
+
+canvas {
+  width: 100%;
+  max-width: 700px;
+  height: 400px;
+  margin-top: 30px;
+}
+
+/* フォームの配置を中央寄せ */
+#subject-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* スマホ対応 */
+@media (max-width: 600px) {
+  main {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  h2, h3 {
+    font-size: 1.5rem;
+  }
+
+  button {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+}
