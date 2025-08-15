@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=chrome">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <title>パスワード作成サイト</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>パスワード作成サイト</h2>
+        <div class="wrapper">
+            <div class="input-box">
+                <input type="text" disabled>
+                <span class="material-symbols-rounded">copy_all</span>
+            </div>
+            <div class="pass-indicator"></div>
+            <div class="pass-length">
+                <div class="details">
+                    <label class="title">パスワードの長さ</label>
+                    <span></span>
+                </div>
+                <input type="range" min="1" max="30" value="15" step="1">
+            </div>
+
+            <div class="pass-settings">
+                <label class="title">パスワード設定</label>
+                <ul class="options">
+                    <li class="option">
+                        <input type="checkbox" id="lowercase" checked>
+                        <label for="lowercase">小文字 (a-z)</label>
+                    </li>
+                    <li class="option">
+                        <input type="checkbox" id="uppercase">
+                        <label for="uppercase">大文字 (A-Z)</label>
+                    </li>
+                    <li class="option">
+                        <input type="checkbox" id="numbers">
+                        <label for="numbers">数字 (0-9)</label>
+                    </li>
+                    <li class="option">
+                        <input type="checkbox" id="symbols">
+                        <label for="symbols">記号 (!-$^+)</label>
+                    </li>
+                    <li class="option">
+                        <input type="checkbox" id="exc-duplicate">
+                        <label for="exc-duplicate">重復を除外</label>
+                    </li>
+                    <li class="option">
+                        <input type="checkbox" id="spaces">
+                        <label for="spaces">スペースを含める</label>
+                    </li>
+                </ul>
+            </div>
+            <button class="generate-btn">パスワードを生成する</button>
+
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
