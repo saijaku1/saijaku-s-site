@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newシューティング</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Newシューティング</h1>
+  <div id="hud">
+    <span>スコア: <span id="score">0</span></span>
+    <span>体力: <span id="health">100</span></span>
+    <span>弾数: <span id="ammo">0</span></span>
+    <span>武器: <span id="weaponName"></span></span>
+    <span>ステージ: <span id="stageNum">1</span></span>
+    <button id="reloadBtn">リロード</button>
+    <select id="weaponSelect"></select>
+  </div>
+  <canvas id="gameCanvas" width="800" height="500"></canvas>
+  <div class="explan">
+    <p>このゲームは、敵を倒してスコアを稼ぐシューティングゲームです。</p>
+    <p>武器を選択して、敵を撃ちましょう。</p>
+    <p>マウスを使ってクリックしながら敵を撃ちましょう</p>
+    <p>弾薬がなくなったらリロードしてください。</p>
+    <p>敵を倒すとスコアが増えます。体力が0になるとゲームオーバーです。</p>
+    <p>操作はWADSキーのみです。</p>
+  </div>
+  <footer>© 2025 じゃくのサイト</footer>
+  <script src="script.js"></script>
+</body>
+</html>
