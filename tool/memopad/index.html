@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>メモ帳</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #222;
+      --accent-color: #007bff;
+      --box-color: white;
+    }
+
+    body.dark {
+      --bg-color: #1e1e1e;
+      --text-color: #f0f0f0;
+      --accent-color: #66d9ef;
+      --box-color: #2e2e2e;
+    }
+
+    body {
+      font-family: sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .controls, .note-editor, .preview {
+      margin-top: 20px;
+      background: var(--box-color);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 8px;
+      font-size: 1rem;
+      margin-top: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    textarea {
+      resize: vertical;
+      height: 200px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .preview {
+      white-space: pre-wrap;
+      border: 1px dashed #ccc;
+    }
+
+    .dark-toggle {
+      float: right;
+      margin-top: -40px;
+    }
+
+    small {
+      display: block;
+      margin-top: 5px;
+      color: gray;
+    }
+  </style>
+  <link rel="icon" href="../image/jaku.png">
+</head>
+<body>
+  <h1>メモ帳</h1>
+  <button class="dark-toggle" onclick="toggleDarkMode()">🌓 モード切替</button>
+
+  <div class="controls">
+    <label for="noteTitle">タイトル：</label>
+    <input type="text" id="noteTitle" placeholder="例: 今日のアイデア">
+    <button onclick="saveNote()">💾 保存</button>
+    <button onclick="newNote()">➕ 新規メモ</button>
+    <button onclick="deleteNote()">🗑️ 削除</button>
+    <br/>
+    <label for="noteList">📚 メモ選択：</label>
+    <select id="noteList" onchange="loadNote()"></select>
+  </div>
+
+  <div class="note-editor">
+    <label for="noteContent">メモ内容（Markdown対応）：</label>
+    <textarea id="noteContent" placeholder="ここにメモを入力..."></textarea>
+    <small id="savedTime"></small>
+  </div>
+
+  <div class="preview">
+    <strong>🖥️ プレビュー：</strong>
+    <div id="previewArea"></div>
+  </div>
+
+  <script>
+    const noteTitle = document.getElementById("noteTitle");
+    const noteContent = document.getElementById("noteContent");
+    const noteList = document.getElementById("noteList");
+    const savedTime = document.getElementById("savedTime");
+    const previewArea = document.getElementById("previewArea");
+
+    let currentNote = "";
+
+    function saveNote() {
+      if (!noteTitle.value.trim()) {
+        alert("タイトルを入力してください！");
+        return;
+      }
+      const key = "note_" + noteTitle.value.trim();
+      const data = {
+        content: noteContent.value,
+        timestamp: new Date().toLocaleString()
+      };
+      localStorage.setItem(key, JSON.stringify(data));
+      currentNote = key;
+      loadNoteList();
+      savedTime.textContent = `保存しました: ${data.timestamp}`;
+    }
+
+    function loadNote() {
+      const key = noteList.value;
+      const data = JSON.parse(localStorage.getItem(key));
+      if (data) {
+        noteTitle.value = key.replace("note_", "");
+        noteContent.value = data.content;
+        savedTime.textContent = `最終保存: ${data.timestamp}`;
+        currentNote = key;
+        renderPreview(data.content);
+      }
+    }
+
+    function loadNoteList() {
+      noteList.innerHTML = "";
+      for (let key in localStorage) {
+        if (key.startsWith("note_")) {
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = key.replace("note_", "");
+          noteList.appendChild(option);
+        }
+      }
+      if (currentNote) {
+        noteList.value = currentNote;
+      }
+    }
+
+    function deleteNote() {
+      if (currentNote && confirm("本当にこのメモを削除しますか？")) {
+        localStorage.removeItem(currentNote);
+        currentNote = "";
+        noteTitle.value = "";
+        noteContent.value = "";
+        savedTime.textContent = "";
+        renderPreview("");
+        loadNoteList();
+      }
+    }
+
+    function newNote() {
+      noteTitle.value = "";
+      noteContent.value = "";
+      savedTime.textContent = "";
+      renderPreview("");
+      currentNote = "";
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+    }
+
+    // 簡単なMarkdown変換（超ざっくり）
+    function renderPreview(text) {
+      let html = text
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>')
+        .replace(/\*(.*?)\*/gim, '<i>$1</i>')
+        .replace(/\n/g, "<br>");
+      previewArea.innerHTML = html;
+    }
+
+    // リアルタイムプレビュー
+    noteContent.addEventListener("input", () => {
+      renderPreview(noteContent.value);
+    });
+
+    // 初期化
+    window.onload = () => {
+      loadNoteList();
+      if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark");
+      }
+    };
+  </script>
+</body>
+</html>
