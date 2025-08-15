@@ -1,33 +1,369 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Newシューティング</title>
+  <meta charset="UTF-8">
+  <title>ちょっと難しいブロック崩し</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #startScreen, #gameUI {
+      text-align: center;
+      margin-top: 20px;
+    }
+    #startButton, #restartButton, #clearRankingButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    canvas {
+      background: #fff;
+      border: 2px solid #000;
+      margin-top: 10px;
+    }
+    .info {
+      color: white;
+      margin: 5px;
+    }
+    .ptag {
+      color: white;
+      margin-top: 10px;
+    }
+    .explan {
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+      max-width: 640px;
+    }
+    #ranking {
+      color: white;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
   <link rel="icon" href="../../image/jaku.png">
-<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Newシューティング</h1>
-  <div id="hud">
-    <span>スコア: <span id="score">0</span></span>
-    <span>体力: <span id="health">100</span></span>
-    <span>弾数: <span id="ammo">0</span></span>
-    <span>武器: <span id="weaponName"></span></span>
-    <span>ステージ: <span id="stageNum">1</span></span>
-    <button id="reloadBtn">リロード</button>
-    <select id="weaponSelect"></select>
+  <div id="startScreen">
+    <h1 style="color:white">新・ちょっと難しいブロック崩し</h1>
+    <button id="startButton">スタート</button>
+    <button id="clearRankingButton">ランキングをリセット</button>
   </div>
-  <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+  <div id="gameUI" style="display:none;">
+    <canvas id="gameCanvas" width="640" height="480"></canvas>
+    <div class="info">
+      <span id="score">スコア: 0</span>
+      <span id="lives">ライフ: 5</span>
+      <span id="level">レベル: 1</span>
+    </div>
+    <button id="restartButton">リスタート</button>
+  </div>
+
+  <p class="ptag">※ 画面が小さい場合は全画面でのプレイを推奨</p>
+
   <div class="explan">
-    <p>このゲームは、敵を倒してスコアを稼ぐシューティングゲームです。</p>
-    <p>武器を選択して、敵を撃ちましょう。</p>
-    <p>マウスを使ってクリックしながら敵を撃ちましょう</p>
-    <p>弾薬がなくなったらリロードしてください。</p>
-    <p>敵を倒すとスコアが増えます。体力が0になるとゲームオーバーです。</p>
-    <p>操作はWADSキーのみです。</p>
+    <h2>ルール説明</h2>
+    <p>このゲームではブロックを2回壊す必要があり、ボールが速く、パドルも小さくて難易度ちょっと高めです。</p>
+    <p>ランキングはローカルに保存され、最高スコアTOP10が表示されます。</p>
+    <p>ちなみに作者の最高スコアは145だった(スピード速すぎて萎えた)</p>
   </div>
-  <footer>© 2025 じゃくのサイト</footer>
-  <script src="script.js"></script>
+
+  <div id="ranking">
+    <h2>ランキング</h2>
+    <ol id="rankingList"></ol>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const startScreen = document.getElementById("startScreen");
+    const gameUI = document.getElementById("gameUI");
+    const startButton = document.getElementById("startButton");
+    const restartButton = document.getElementById("restartButton");
+    const clearRankingButton = document.getElementById("clearRankingButton");
+    const scoreDisplay = document.getElementById("score");
+    const livesDisplay = document.getElementById("lives");
+    const levelDisplay = document.getElementById("level");
+    const rankingList = document.getElementById("rankingList");
+
+    let balls = [];
+    let paddle;
+    let bricks = [];
+    let score = 0;
+    let lives = 5;
+    let level = 1;
+    let isPlaying = false;
+
+    const brick = {
+      rowCount: 7,//数上げていけば難易度高くなるぜ
+      columnCount: 5,//5以上は設定しないほうがいい
+      width: 100,
+      height: 20,
+      padding: 10,
+      offsetTop: 30,
+      offsetLeft: 30
+    };
+
+    function resetGame() {
+      balls = [{
+        x: canvas.width / 2,
+        y: canvas.height - 30,
+        dx: 4 + level,
+        dy: -4 - level,
+        radius: 10
+      }];
+      paddle = {
+        width: 150,
+        height: 10,
+        x: (canvas.width - 80) / 2,
+        speed: 14,
+        rightPressed: false,
+        leftPressed: false
+      };
+      score = 0;
+      lives = 5;
+      level = 1;
+      initBricks();
+    }
+
+    function initBricks() {
+      bricks = [];
+      for (let c = 0; c < brick.columnCount; c++) {
+        bricks[c] = [];
+        for (let r = 0; r < brick.rowCount + level - 1; r++) {
+          bricks[c][r] = { x: 0, y: 0, hits: 2 };
+        }
+      }
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Right" || e.key === "ArrowRight") paddle.rightPressed = true;
+      if (e.key === "Left" || e.key === "ArrowLeft") paddle.leftPressed = true;
+    });
+    document.addEventListener("keyup", e => {
+      if (e.key === "Right" || e.key === "ArrowRight") paddle.rightPressed = false;
+      if (e.key === "Left" || e.key === "ArrowLeft") paddle.leftPressed = false;
+    });
+
+    canvas.addEventListener("touchstart", e => {
+      const touchX = e.touches[0].clientX - canvas.offsetLeft;
+      if (touchX < canvas.width / 2) paddle.leftPressed = true;
+      else paddle.rightPressed = true;
+    });
+    canvas.addEventListener("touchend", () => {
+      paddle.leftPressed = false;
+      paddle.rightPressed = false;
+    });
+
+    function drawBall(ball) {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "#e91e63";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function drawPaddle() {
+      ctx.beginPath();
+      ctx.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height);
+      ctx.fillStyle = "#2196f3";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function drawBricks() {
+      for (let c = 0; c < brick.columnCount; c++) {
+        for (let r = 0; r < bricks[c].length; r++) {
+          const b = bricks[c][r];
+          if (b.hits > 0) {
+            const brickX = c * (brick.width + brick.padding) + brick.offsetLeft;
+            const brickY = r * (brick.height + brick.padding) + brick.offsetTop;
+            b.x = brickX;
+            b.y = brickY;
+            ctx.beginPath();
+            ctx.rect(brickX, brickY, brick.width, brick.height);
+            ctx.fillStyle = b.hits === 2 ? "#4caf50" : "#ffc107";
+            ctx.fill();
+            ctx.closePath();
+          }
+        }
+      }
+    }
+
+    function collisionDetection() {
+      balls.forEach(ball => {
+        for (let c = 0; c < brick.columnCount; c++) {
+          for (let r = 0; r < bricks[c].length; r++) {
+            const b = bricks[c][r];
+            if (b.hits > 0) {
+              if (
+                ball.x > b.x &&
+                ball.x < b.x + brick.width &&
+                ball.y > b.y &&
+                ball.y < b.y + brick.height
+              ) {
+                ball.dy = -ball.dy;
+                b.hits--;
+                if (b.hits === 0) score++;
+                updateScore();
+                if (checkClear()) {
+                  level++;
+                  balls.forEach(b => {
+                    b.dx = 4 + level;
+                    b.dy = -4 - level;
+                  });
+                  initBricks();
+                  updateLevel();
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function checkClear() {
+      return bricks.flat().every(b => b.hits === 0);
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = `スコア: ${score}`;
+    }
+
+    function updateLives() {
+      livesDisplay.textContent = `ライフ: ${lives}`;
+    }
+
+    function updateLevel() {
+      levelDisplay.textContent = `レベル: ${level}`;
+    }
+
+    function draw() {
+      if (!isPlaying) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBricks();
+      balls.forEach(drawBall);
+      drawPaddle();
+      collisionDetection();
+
+      balls.forEach((ball, index) => {
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+
+        if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0)
+          ball.dx = -ball.dx;
+        if (ball.y - ball.radius < 0)
+          ball.dy = -ball.dy;
+
+        if (ball.y + ball.radius > canvas.height) {
+          balls.splice(index, 1);
+        }
+
+        if (
+          ball.y + ball.radius >= canvas.height - paddle.height &&
+          ball.x > paddle.x &&
+          ball.x < paddle.x + paddle.width
+        ) {
+          ball.dy = -Math.abs(ball.dy);
+        }
+      });
+
+      if (balls.length === 0) {
+        lives--;
+        updateLives();
+        if (lives === 0) {
+          alert("ゲームオーバー！");
+          addRanking({ score, level });
+          displayRanking();
+          isPlaying = false;
+          startScreen.style.display = "block";
+          gameUI.style.display = "none";
+          return;
+        } else {
+          balls.push({
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            dx: 4 + level,
+            dy: -4 - level,
+            radius: 10
+          });
+        }
+      }
+
+      if (paddle.rightPressed && paddle.x < canvas.width - paddle.width)
+        paddle.x += paddle.speed;
+      if (paddle.leftPressed && paddle.x > 0)
+        paddle.x -= paddle.speed;
+
+      requestAnimationFrame(draw);
+    }
+
+    function loadRanking() {
+      const data = localStorage.getItem("hardBreakerRanking");
+      return data ? JSON.parse(data) : [];
+    }
+
+    function saveRanking(ranking) {
+      localStorage.setItem("hardBreakerRanking", JSON.stringify(ranking));
+    }
+
+    function addRanking(entry) {
+      let ranking = loadRanking();
+      ranking.push({ ...entry, date: new Date().toLocaleString() });
+      ranking.sort((a, b) => b.score - a.score);
+      if (ranking.length > 10) ranking = ranking.slice(0, 10);
+      saveRanking(ranking);
+    }
+
+    function displayRanking() {
+      const ranking = loadRanking();
+      rankingList.innerHTML = "";
+      if (ranking.length === 0) {
+        rankingList.innerHTML = "<li>まだ記録がありません</li>";
+      } else {
+        ranking.forEach(e => {
+          const li = document.createElement("li");
+          li.textContent = `スコア: ${e.score} レベル: ${e.level} (${e.date})`;
+          rankingList.appendChild(li);
+        });
+      }
+    }
+
+    startButton.onclick = () => {
+      startScreen.style.display = "none";
+      gameUI.style.display = "block";
+      resetGame();
+      updateScore();
+      updateLives();
+      updateLevel();
+      displayRanking();
+      isPlaying = true;
+      draw();
+    };
+
+    restartButton.onclick = () => {
+      location.reload();
+    };
+
+    clearRankingButton.onclick = () => {
+      if (confirm("ランキングをリセットしますか？")) {
+        localStorage.removeItem("hardBreakerRanking");
+        displayRanking();
+      }
+    };
+  </script>
 </body>
 </html>
