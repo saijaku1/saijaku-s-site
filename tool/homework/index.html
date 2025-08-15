@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+<link rel="icon" href="../../image/jaku.png">
+  <title>宿題チェックサイト</title>
+</head>
+<body>
+  <div id="title">
+    <h1>宿題を終わらせるために目標を決めよう！</h1>
+  </div>
+  <div class="container">
+    <div class="taskFormContainer">
+      <h2>宿題リスト</h2>
+      <div class="taskForm">
+        <input type="text" class="taskField" id="taskField" placeholder="宿題内容">
+        <input type="number" class="timeField" id="timeField" placeholder="勉強時間 (分)">
+        <input type="date" class="deadlineField" id="deadlineField">
+        <input type="button" value="追加" class="taskAddButton" id="taskAddButton">
+      </div>
+    </div>
+    <p id="error" style="color: red; display: none;">宿題内容を入力してください。</p>
+    <div class="progressBarContainer">
+      <div id="progressBar" class="progressBar"></div>
+    </div>
+    <div class="controls">
+      <input type="button" id="allDoneButton" class="allDoneButton" value="すべて完了">
+      <input type="button" id="allDeleteButton" class="allDeleteButton" value="すべて削除">
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+  <footer>
+    <p>&;copy 2025 じゃくのサイト | 宿題チェックサイト </p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
