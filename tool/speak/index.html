@@ -131,8 +131,8 @@ footer{
         return;
       }
       let utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = Math.random() * 2 + 0.5;  // 0.5～2.5くらいの速度
-      utterance.pitch = Math.random() * 2 + 0.5; // 0.5～2.5くらいのピッチ
+      utterance.rate = Math.random() * 20 + 0.5;  // 0.5～2.5くらいの速度
+      utterance.pitch = Math.random() * 20 + 0.5; // 0.5～2.5くらいのピッチ
       speechSynthesis.speak(utterance);
       h2.style.display = "block";
       status.textContent = `再生中: 速度 = ${utterance.rate.toFixed(2)}, ピッチ = ${utterance.pitch.toFixed(2)}`;
