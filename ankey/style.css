@@ -24,8 +24,8 @@ header {
   align-items: center;
   background: rgba(20, 20, 20, 0.6);
   backdrop-filter: blur(10px);
+  z-index: 100;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  z-index: 1000;
   transition: background 0.3s ease, padding 0.3s ease;
 }
 header.scrolled {
@@ -42,15 +42,23 @@ header h1 {
 
 .nav-list {
   display: flex;
+  margin-top:130px;
+  position:fixed;
+  right:50px;
+  top:-110px;
+  list-style: none;
+  z-index: 1000;
   gap: 28px;
 }
 .nav-list li a {
   color: #e6e6e6;
   font-size: 1rem;
+  text-decoration: none;
   transition: color 0.3s, transform 0.2s;
 }
 .nav-list li a:hover {
   color: #10a37f;
+  text-decoration: underline;
   transform: translateY(-3px);
 }
 
@@ -90,6 +98,7 @@ article {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   animation: fadeUp 0.6s ease forwards;
   opacity: 0;
+  
 }
 article:hover {
   transform: translateY(-10px) scale(1.02);
@@ -110,7 +119,7 @@ article p {
   font-size: 0.95rem;
   margin-bottom: 12px;
   line-height: 1.7;
-  flex-grow:1;
+  
 }
 article a {
   display: inline-block;
@@ -153,14 +162,17 @@ footer p {
   justify-content: center;
   gap: 25px;
   margin-top: 15px;
+ list-style: none;
 }
 .nav-list-footer a {
   color: #ddd;
   font-size: 0.9rem;
-  transition: color 0.3s;
+  text-decoration: none;
 }
 .nav-list-footer a:hover {
   color: #10a37f;
+  text-decoration: underline;
+  transition: color 0.3s;
 }
 
 
@@ -188,6 +200,13 @@ footer p {
   }
   .hamburger {
     display: flex;
+    z-index: 1000;
+    position: fixed;
+    top: 10px;
+    right: 30px;
+    padding:12px;
+    background: rgba(20,20,20,0.6);
+    border-radius:8px;
   }
   section {
     padding: 80px 5%;
