@@ -110,6 +110,7 @@ article p {
   font-size: 0.95rem;
   margin-bottom: 12px;
   line-height: 1.7;
+  flex-grow:1;
 }
 article a {
   display: inline-block;
