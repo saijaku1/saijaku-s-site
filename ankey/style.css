@@ -197,6 +197,7 @@ footer p {
   .nav-list.active {
     display: flex;
     animation: slideDown 0.4s ease;
+    position:fixed;
   }
   .hamburger {
     display: flex;
