@@ -184,7 +184,6 @@ footer p {
 
 @media(max-width: 768px) {
   .nav-list {
-    position: absolute;
     top: 70px;
     right: 20px;
     flex-direction: column;
