@@ -100,21 +100,7 @@ body {
       transform: translateY(0);
     }
   }
-    .download {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 20px;
-    background: linear-gradient(90deg, #ff7e5f, #feb47b);
-    color: #fff;
-    text-decoration: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s, box-shadow 0.3s;
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
-    }
-  }
+ 
   footer {
     text-align: center;
     font-size: 0.9em;
