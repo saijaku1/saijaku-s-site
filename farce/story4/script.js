@@ -27,9 +27,9 @@ document.querySelector(".returnBtn").addEventListener("click", () => {
 });
 
 document.querySelector(".nextBtn").addEventListener("click", () => {
-  window.location.href = "https://saijaku.f5.si/farce/story4/";
+  window.location.href = "https://saijaku.f5.si/farce/story5/";
 });
 document.querySelector(".backBtn").addEventListener("click", () => {
-  window.location.href = "https://saijaku.f5.si/farce/story2/";
+  window.location.href = "https://saijaku.f5.si/farce/story3/";
 });
   
