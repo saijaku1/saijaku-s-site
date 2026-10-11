@@ -4,67 +4,68 @@ const notices = [
     date: "2026-10-11",
     category: "ニュース",
     content:
-      "こんにちは。お久しぶりです。高校生になってから人生を謳歌しているJakuです。",
-      "ここ最近更新できてなくてすみませんでした！！茶番だったりバイトだったり定期テストだったりいろいろ...etc",
-      "ですが、その裏では三代目の公式サイトを開発していました！",
-      ".....はい。どんだけお前新しい公式サイトを作れば気が済むんだと",
+      "こんにちは。お久しぶりです。高校生になってから人生を謳歌しているJakuです。<br>" +
+      "ここ最近更新できてなくてすみませんでした！！茶番だったりバイトだったり定期テストだったりいろいろ...etc<br>" +
+      "ですが、その裏では三代目の公式サイトを開発していました！<br>" +
+      ".....はい。どんだけお前新しい公式サイトを作れば気が済むんだと<br>" +
       "本当にすみませんでした。あと少しで三代目の公式サイトが完成するので少しだけ待っててください！！！！"
-    },
+  },
   {
     title: "二代目mysiteが遂に完成！",
     date: "2025-06-21",
     category: "更新情報",
     content:
-      "二代目mysiteが遂に完成しました！開発期間<b>半年</b>...めっちゃつらかった...でも、これでやっと新しいスタートが切れます！",
-    },
-    {
-        title: "初代と二代目の違い",
-        date: "2025-06-23",
-        category: "変更点",
-        content: "初代mysiteと二代目mysiteの違い(変更点)について紹介します。<br>二代目と初代で以下のように名前が変更されました<br><b>最弱が作ったサイト</b>→<b>じゃくのツール箱</b><br><b>じゃくのアニメサイト</b>→<b>茶番</b><br> また、デザインも一新され、よりモダンで使いやすくなりました。！<br>今後ともmysiteをよろしくお願いします！",
-    },
-    {
-        title: "茶番サイト開設！",
-        date: "2025-7-5",
-        category: "更新情報",
-        content: "すみません！更新遅くなって！！やっと完成しました！スタイル決めるために1週間ぐらいかかりました！結論から言うと、初代とあんま変わらないです。暇つぶしに僕とココツたちの茶番をぜひ見てください！ 今後ともmysiteをよろしくお願いします",
-    },
-    {
+      "二代目mysiteが遂に完成しました！開発期間<b>半年</b>...めっちゃつらかった...でも、これでやっと新しいスタートが切めます！",
+  },
+  {
+    title: "初代と二代目の違い",
+    date: "2025-06-23",
+    category: "変更点",
+    content: "初代mysiteと二代目mysiteの違い(変更点)について紹介します。<br>二代目と初代で以下のように名前が変更されました<br><b>最弱が作ったサイト</b>→<b>じゃくのツール箱</b><br><b>じゃくのアニメサイト</b>→<b>茶番</b><br> また、デザインも一新され、よりモダンで使いやすくなりました。！<br>今後ともmysiteをよろしくお願いします！",
+  },
+  {
+    title: "茶番サイト開設！",
+    // バグ防止のため、1桁の月日を「07」「05」に修正しました
+    date: "2025-07-05", 
+    category: "更新情報",
+    content: "すみません！更新遅くなって！！やっと完成しました！スタイル決めるために1週間ぐらいかかりました！結論から言うと、初代とあんま変わらないです。暇つぶしに僕とココツたちの茶番をぜひ見てください！ 今後ともmysiteをよろしくお願いします",
+  },
+  {
     title: "現在進行形でAnkey活動中！！",
-    date: "2025-7-29",
+    date: "2025-07-29",
     category: "その他",
     content:
       "自分めっちゃAnkeyやってるので、もし興味があればぜひ見てください！<br>Ankeyは、タイピングを鍛えまくるサイトで、僕は毎日使っています。<br>僕のプロフィールは<a href='https://ankey.io/@jaku'>こちら</a>から確認できます。",
   },
-    {
+  {
     title: "無事、部活を引退しました",
-    date: "2025-9-2",
+    date: "2025-09-02", // 「02」に修正
     category: "その他",
     content:
       "8月31日をもってこの度、Jakuはようやく陸上部(幅跳び)を引退しました。記録は6m11cm...(ようやくと言ったらなんか喜んでいるようにも見えるな。まあ実際はうれしいんだけど。)つまりここからは受験勉強です。正直言って、学校いきたくない....ずっとサイト開発していたい...でも9月の中盤には中間テストが....っていうことで9月18日までは少しこのサイトの開発をお休みします(は？)でも、9月18日を過ぎたらいっぱい開発できるので少しの間なのですがお待ちください...zzz",
   },
-      {
+  {
     title: "Ankeyを引退しました",
-    date: "2025-10-7",
+    date: "2025-10-07", // 「07」に修正
     category: "その他",
     content:
       "この度をもってわたくし、じゃくはAnkeyを引退することになりました。理由は単純です。Ankeyはタイピングサイトなのですがタイピングの練習がまともにできないし、関係ないものばかり投稿ばかり見るのでもううんざりしました。まぁもうあんなサイトは行きません。",
   },
-    {
+  {
     title: "しばらくの間活動休止します",
     date: "2025-10-29",
     category: "ニュース",
     content:
       "どうも。最近テスト勉強が忙しすぎて開発もしきれていないじゃくです。ここからはテスト期間と受験期間なので、しばらく開発を中止します。再開は2026年2月18日の予定をしています。ご迷惑をかけて申し訳ありませんが、ご理解ご協力をお願いします",
   },
-     {
+  {
     title: "活動再開！！",
     date: "2026-03-05",
     category: "ニュース",
     content:
       "受験が終わって無事、高校に合格したので活動再開します！！",
   },
-   {
+  {
     title: "自己紹介を別のページに移し替えました",
     date: "2026-03-06",
     category: "変更点",
@@ -82,6 +83,7 @@ function formatDate(dateString) {
 
 function displayNotices(filterDate = "", filterCategory = "") {
   const noticeList = document.getElementById("noticeList");
+  if (!noticeList) return; // 要素がない場合の安全対策
   noticeList.innerHTML = "";
 
   const filteredNotices = notices
@@ -92,12 +94,14 @@ function displayNotices(filterDate = "", filterCategory = "") {
         (!filterCategory || notice.category === filterCategory)
       );
     })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+    // 安全のため、フォーマット済みの文字列同士で並び替えるように変更
+    .sort((a, b) => formatDate(b.date).localeCompare(formatDate(a.date)));
 
   if (filteredNotices.length === 0) {
     const noNotices = document.createElement("div");
     noNotices.textContent = "記事がありません。";
     noticeList.appendChild(noNotices);
+    return;
   }
 
   filteredNotices.forEach((notice) => {
@@ -114,31 +118,41 @@ function displayNotices(filterDate = "", filterCategory = "") {
   });
 }
 
-document.getElementById("dateFilter").addEventListener("change", (e) => {
-  displayNotices(
-    e.target.value,
-    document.getElementById("categoryFilter").value
-  );
-});
+// イベントリスナーの登録（HTML要素が存在することを確認）
+const dateFilter = document.getElementById("dateFilter");
+if (dateFilter) {
+  dateFilter.addEventListener("change", (e) => {
+    const categoryFilter = document.getElementById("categoryFilter");
+    displayNotices(e.target.value, categoryFilter ? categoryFilter.value : "");
+  });
+}
+
+const categoryFilter = document.getElementById("categoryFilter");
+if (categoryFilter) {
+  categoryFilter.addEventListener("change", (e) => {
+    const dateFilter = document.getElementById("dateFilter");
+    displayNotices(dateFilter ? dateFilter.value : "", e.target.value);
+  });
+}
+
+// 初回表示
 displayNotices();
 
-document.getElementById("categoryFilter").addEventListener("change", (e) => {
-  displayNotices(document.getElementById("dateFilter").value, e.target.value);
-});
+const toggleDarkMode = document.getElementById("toggleDarkMode");
+if (toggleDarkMode) {
+  toggleDarkMode.addEventListener("click", () => {
+    const isDarkMode = document.body.classList.contains("dark-mode");
+    document.body.classList.toggle("dark-mode");
 
-document.getElementById("toggleDarkMode").addEventListener("click", () => {
-  const isDarkMode = document.body.classList.contains("dark-mode");
-  document.body.classList.toggle("dark-mode");
-
-  if (isDarkMode) {
-    document.getElementById("toggleDarkMode").textContent =
-      "ダークモードに切り替え";
-  } else {
-    document.getElementById("toggleDarkMode").textContent =
-      "ライトモードに切り替え";
-  }
-});
+    if (isDarkMode) {
+      toggleDarkMode.textContent = "ダークモードに切り替え";
+    } else {
+      toggleDarkMode.textContent = "ライトモードに切り替え";
+    }
+  });
+}
 
 function back() {
   window.history.back();
 }
+
